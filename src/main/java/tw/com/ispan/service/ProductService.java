@@ -42,8 +42,11 @@ public class ProductService {
 	}
 
 	public ProductBean findById(Integer id) {
-		ProductBean result = productRepository.findById(id).get();
-		return result;
+		Optional<ProductBean> opt = productRepository.findById(id);
+		if (opt.isPresent()) {
+			return opt.get();
+		}
+		return null;
 	}
 
 	public boolean exists(Integer id) {
@@ -56,9 +59,9 @@ public class ProductService {
 
 		if (bean != null && bean.getId() != null && !bean.getId().equals(0)) {
 			Optional<ProductBean> opt = productRepository.findById(bean.getId());
-			opt.ifPresent(result::add);  // 若有資料就加入 result
+			opt.ifPresent(result::add); // 若有資料就加入 result
 		} else {
-			result = productRepository.findAll();  // 查詢所有資料
+			result = productRepository.findAll(); // 查詢所有資料
 		}
 
 		return result;
@@ -100,12 +103,13 @@ public class ProductService {
 	}
 
 	public ProductBean update(ProductBean bean) {
-		Optional<ProductBean> opt = productRepository.findById(bean.getId());
-		ProductBean updateBean = opt.get();
 		if (bean != null && bean.getId() != null) {
-			updateBean = productRepository.save(updateBean);
+			Optional<ProductBean> opt = productRepository.findById(bean.getId());
+			if (opt.isPresent()) {
+				return productRepository.save(bean);
+			}
 		}
-		return updateBean;
+		return null;
 	}
 
 	public ProductBean modify(String json) {
@@ -133,20 +137,19 @@ public class ProductService {
 	}
 
 	public boolean delete(ProductBean bean) {
-		boolean result = false;
-		Optional<ProductBean> deleteBean = productRepository.findById(bean.getId());
-		if (deleteBean.isPresent()) {
-			productRepository.delete(deleteBean.get());
-			result = true;
+		Optional<ProductBean> opt = productRepository.findById(bean.getId());
+		if (opt.isPresent()) {
+			productRepository.delete(opt.get());
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	public boolean remove(Integer id) {
 		try {
-			Optional<ProductBean> deleteBean = productRepository.findById(id);
-			if (deleteBean.isPresent()) {
-				productRepository.delete(deleteBean.get());
+			Optional<ProductBean> opt = productRepository.findById(id);
+			if (opt.isPresent()) {
+				productRepository.delete(opt.get());
 				return true;
 			}
 		} catch (Exception e) {
