@@ -33,8 +33,7 @@ public class ProductService {
 	public List<ProductBean> find(String json) {
 		try {
 			JSONObject obj = new JSONObject(json);
-			List<ProductBean> list = productRepository.find(obj);
-			return list;
+			return productRepository.find(obj);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

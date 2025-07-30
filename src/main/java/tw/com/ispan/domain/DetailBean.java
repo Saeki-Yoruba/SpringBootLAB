@@ -1,7 +1,5 @@
 package tw.com.ispan.domain;
 
-import java.util.Arrays;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,7 +8,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -33,6 +30,6 @@ public class DetailBean {
 
 	@Override
 	public String toString() {
-		return "DetailBean [photoid=" + photoid + ", photo=" + Arrays.toString(photo) + "]";
+		return "DetailBean [photoid=" + photoid + "]";
 	}
 }
