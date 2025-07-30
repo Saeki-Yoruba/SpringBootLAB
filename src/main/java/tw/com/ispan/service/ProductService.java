@@ -52,25 +52,26 @@ public class ProductService {
 	}
 
 	public List<ProductBean> select(ProductBean bean) {
-		List<ProductBean> result = null;
+		List<ProductBean> result = new ArrayList<>();
+
 		if (bean != null && bean.getId() != null && !bean.getId().equals(0)) {
-			ProductBean temp = productRepository.findById(bean.getId()).get();
-			if (temp != null) {
-				result = new ArrayList<ProductBean>();
-				result.add(temp);
-			}
+			Optional<ProductBean> opt = productRepository.findById(bean.getId());
+			opt.ifPresent(result::add);  // 若有資料就加入 result
 		} else {
-			return result;
+			result = productRepository.findAll();  // 查詢所有資料
 		}
+
 		return result;
 	}
 
 	public ProductBean insert(ProductBean bean) {
-		ProductBean result = null;
 		if (bean != null && bean.getId() != null) {
-			result = productRepository.save(bean);
+			Optional<ProductBean> opt = productRepository.findById(bean.getId());
+			if (opt.isEmpty()) {
+				return productRepository.save(bean);
+			}
 		}
-		return result;
+		return null;
 	}
 
 	public ProductBean create(String json) {
@@ -145,12 +146,12 @@ public class ProductService {
 		try {
 			Optional<ProductBean> deleteBean = productRepository.findById(id);
 			if (deleteBean.isPresent()) {
-	            productRepository.delete(deleteBean.get());
-	            return true;
-	        }
+				productRepository.delete(deleteBean.get());
+				return true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
 		return false;
 	}
 }

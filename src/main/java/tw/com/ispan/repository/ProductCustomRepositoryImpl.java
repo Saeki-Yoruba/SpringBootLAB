@@ -97,8 +97,61 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 	
 	@Override
 	public long count(JSONObject obj) {
-		List<ProductBean> list = this.find(obj);
-		long result = list.size();
-		return result;
+		Integer id = obj.isNull("id") ? null : obj.getInt("id");
+		String name = obj.isNull("name") ? null : obj.getString("name");
+		Double minPrice = obj.isNull("minPrice") ? null : obj.getDouble("minPrice");
+		Double maxPrice = obj.isNull("maxPrice") ? null : obj.getDouble("maxPrice");
+		String minMake = obj.isNull("minMake") ? null : obj.getString("minMake");
+		String maxMake = obj.isNull("maxMake") ? null : obj.getString("maxMake");
+		Integer minExpire = obj.isNull("minExpire") ? null : obj.getInt("minExpire");
+		Integer maxExpire = obj.isNull("maxExpire") ? null : obj.getInt("maxExpire");
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+		// FROM product
+		Root<ProductBean> table = criteriaQuery.from(ProductBean.class);
+		
+		// count(*)
+		criteriaQuery = criteriaQuery.select(criteriaBuilder.count(table));
+		
+		// where 條件
+		List<Predicate> predicates = new ArrayList<>();
+		if (id != null) {
+			predicates.add(criteriaBuilder.equal(table.get("id"), id));
+		}
+		if (name != null && name.length() != 0) {
+			predicates.add(criteriaBuilder.like(table.get("name"), "%" + name + "%"));
+		}
+		if (minPrice != null) {
+			predicates.add(criteriaBuilder.greaterThan(table.get("minPrice"), minPrice));
+		}
+		if (maxPrice != null) {
+			predicates.add(criteriaBuilder.lessThan(table.get("maxPrice"), maxPrice));
+		}
+		if (minMake != null && minMake.length() != 0) {
+			Date make = DatetimeConverter.parse(minMake, "yyyy=MM=dd");
+			predicates.add(criteriaBuilder.greaterThanOrEqualTo(table.get("make"), make));
+		}
+		if (maxMake != null && maxMake.length() != 0) {
+			Date make = DatetimeConverter.parse(maxMake, "yyyy=MM=dd");
+			predicates.add(criteriaBuilder.lessThanOrEqualTo(table.get("make"), make));
+		}
+		if (minExpire != null) {
+			predicates.add(criteriaBuilder.greaterThanOrEqualTo(table.get("expire"), minExpire));
+		}
+		if (maxExpire != null) {
+			predicates.add(criteriaBuilder.lessThanOrEqualTo(table.get("expire"), maxExpire));
+		}
+
+		if (predicates != null && !predicates.isEmpty()) {
+			criteriaQuery = criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		}
+		
+		TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+		Long result = typedQuery.getSingleResult();
+		if (result != null) {
+			return result.longValue();
+		}
+		return 0;
 	}
 }

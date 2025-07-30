@@ -35,7 +35,7 @@ public class ProductServiceTests {
 		System.out.println("count result: " + productService.count(json));
 	}
 
-//	@Test
+	@Test
 	public void testFind() {
 		List<ProductBean> list = productService.find(json);
 		System.out.println("find :" + list);
@@ -129,7 +129,7 @@ public class ProductServiceTests {
         System.out.println("exists after delete = " + exists); // 應該為 false
 	}
 	
-	@Test
+//	@Test
 	public void testRemove() {
 		ProductBean bean = new ProductBean();
         bean.setId(998);

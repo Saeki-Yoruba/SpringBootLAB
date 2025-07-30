@@ -34,4 +34,10 @@ public class ProductBean {
 
 	@OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
 	private DetailBean detail;
+
+	@Override
+	public String toString() {
+		return "ProductBean [id=" + id + ", name=" + name + ", price=" + price + ", make=" + make + ", expire=" + expire
+				+ "]";
+	}
 }

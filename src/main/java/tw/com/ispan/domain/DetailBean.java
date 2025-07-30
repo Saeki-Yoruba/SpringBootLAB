@@ -1,5 +1,7 @@
 package tw.com.ispan.domain;
 
+import java.util.Arrays;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,4 +30,9 @@ public class DetailBean {
         referencedColumnName = "id"
     )
     private ProductBean product;
+
+	@Override
+	public String toString() {
+		return "DetailBean [photoid=" + photoid + ", photo=" + Arrays.toString(photo) + "]";
+	}
 }

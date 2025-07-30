@@ -7,6 +7,6 @@ import org.json.JSONObject;
 import tw.com.ispan.domain.ProductBean;
 
 public interface ProductCustomRepository {
-	List<ProductBean> find(org.json.JSONObject obj);
+	List<ProductBean> find(JSONObject obj);
 	long count(JSONObject obj);
 }
