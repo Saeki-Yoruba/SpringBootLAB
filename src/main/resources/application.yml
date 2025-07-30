@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: labboot-web
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;database=java;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: P@ssw0rd
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.SQLServerDialect
