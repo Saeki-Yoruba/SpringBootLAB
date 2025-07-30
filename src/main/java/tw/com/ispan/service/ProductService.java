@@ -22,9 +22,8 @@ public class ProductService {
 	public long count(String json) {
 		try {
 			JSONObject obj = new JSONObject(json);
-			List<ProductBean> list = productRepository.find(obj);
-			long result = list.size();
-			return result;
+			long count = productRepository.count(obj);
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

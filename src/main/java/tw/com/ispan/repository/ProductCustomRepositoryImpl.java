@@ -18,7 +18,7 @@ import tw.com.ispan.domain.ProductBean;
 import tw.com.ispan.util.DatetimeConverter;
 
 @Repository
-public class ProductRepositoryImpl implements ProductRepositoryCustom {
+public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -93,5 +93,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		}
 
 		return null;
+	}
+	
+	@Override
+	public long count(JSONObject obj) {
+		List<ProductBean> list = this.find(obj);
+		long result = list.size();
+		return result;
 	}
 }
